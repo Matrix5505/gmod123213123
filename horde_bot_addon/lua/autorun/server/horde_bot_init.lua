@@ -2,8 +2,14 @@
 -- This addon adds intelligent bots that work with the Horde Wave Survival gamemode
 
 if SERVER then
+    -- Load shared file first so constants are available
     AddCSLuaFile("horde_bot/sh_bot_shared.lua")
     AddCSLuaFile("horde_bot/cl_bot_hud.lua")
+    
+    -- Include shared file on server first
+    include("horde_bot/sh_bot_shared.lua")
+    
+    -- Then include server files
     include("horde_bot/sv_bots.lua")
     include("horde_bot/sv_bot_perks.lua")
     include("horde_bot/sv_bot_shop.lua")
