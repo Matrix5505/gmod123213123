@@ -39,7 +39,7 @@ function HordeBot.AttemptPerkSelection(bot, perkName, data)
         if success then
             data.currentPerk = perkName
             data.perkLevel = (data.perkLevel or 0) + 1
-            HordeBot.Debug("Bot " .. bot:Nick() .. " selected perk: " .. perkName)
+            print("[Horde Bot] Bot " .. bot:Nick() .. " selected perk: " .. perkName .. " via GAMEMODE:SelectPerk")
             return
         end
     end
@@ -48,18 +48,15 @@ function HordeBot.AttemptPerkSelection(bot, perkName, data)
     if PerkSelectRequest then
         PerkSelectRequest(bot, perkName)
         data.currentPerk = perkName
-        HordeBot.Debug("Bot " .. bot:Nick() .. " requested perk: " .. perkName)
+        print("[Horde Bot] Bot " .. bot:Nick() .. " requested perk: " .. perkName .. " via PerkSelectRequest")
         return
     end
     
     -- Method 3: Concommand approach
     bot:ConCommand("horde_select_perk " .. perkName)
     data.currentPerk = perkName
-    HordeBot.Debug("Bot " .. bot:Nick() .. " used concommand for perk: " .. perkName)
-    
-    -- Fallback: Just track it locally
-    data.currentPerk = perkName
     data.perkLevel = (data.perkLevel or 0) + 1
+    print("[Horde Bot] Bot " .. bot:Nick() .. " used concommand for perk: " .. perkName)
 end
 
 -- Check if bot should change perk based on situation

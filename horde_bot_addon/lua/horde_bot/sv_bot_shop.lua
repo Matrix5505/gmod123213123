@@ -91,11 +91,15 @@ function HordeBot.BotBuyItem(bot, data, itemType, money)
 end
 
 function HordeBot.AttemptBuy(bot, item, cost)
+    -- Get bot data for tracking
+    local data = HordeBot.GetBotData(bot)
+    
     -- Method 1: Try gamemode's buy function
     if GAMEMODE and GAMEMODE.BuyItem then
         local success = GAMEMODE:BuyItem(bot, item)
         if success then
-            data.moneySpent = (data.moneySpent or 0) + cost
+            if data then data.moneySpent = (data.moneySpent or 0) + cost end
+            print("[Horde Bot] Bot " .. bot:Nick() .. " bought " .. item .. " via GAMEMODE:BuyItem")
             return
         end
     end
@@ -103,13 +107,15 @@ function HordeBot.AttemptBuy(bot, item, cost)
     -- Method 2: Try net request
     if ShopBuyRequest then
         ShopBuyRequest(bot, item)
-        data.moneySpent = (data.moneySpent or 0) + cost
+        if data then data.moneySpent = (data.moneySpent or 0) + cost end
+        print("[Horde Bot] Bot " .. bot:Nick() .. " bought " .. item .. " via ShopBuyRequest")
         return
     end
     
     -- Method 3: Concommand approach
     bot:ConCommand("horde_buy " .. item)
-    data.moneySpent = (data.moneySpent or 0) + cost
+    if data then data.moneySpent = (data.moneySpent or 0) + cost end
+    print("[Horde Bot] Bot " .. bot:Nick() .. " used concommand to buy " .. item)
     
     -- Simulate purchase locally for tracking
     if bot.SetMoney then

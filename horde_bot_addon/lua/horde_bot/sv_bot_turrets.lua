@@ -10,12 +10,15 @@ function HordeBot.BotPlaceTurret(bot, data)
     
     -- Check if bot has enough money
     local money = bot.GetMoney and bot:GetMoney() or bot.Money or 0
-    if money < 300 then return end
+    if money < 300 then 
+        HordeBot.Debug("Bot " .. bot:Nick() .. " needs more money for turret (has " .. money .. ", needs 300)")
+        return 
+    end
     
     -- Find good turret position
     local turretPos = HordeBot.FindTurretPosition(bot)
     if not turretPos then
-        HordeBot.Debug("Bot " .. bot:Nick() .. " couldn't find turret position")
+        print("[Horde Bot] Bot " .. bot:Nick() .. " couldn't find turret position")
         return
     end
     
@@ -26,6 +29,7 @@ function HordeBot.BotPlaceTurret(bot, data)
     end
     
     -- Place the turret
+    print("[Horde Bot] Bot " .. bot:Nick() .. " attempting to place turret at " .. tostring(turretPos))
     HordeBot.SpawnTurret(bot, turretPos, data)
 end
 
@@ -76,7 +80,7 @@ function HordeBot.SpawnTurret(bot, pos, data)
             data.currentTurret = turret
             data.turretPlaced = true
             turretEntities[turret] = {owner = bot, placedTime = CurTime()}
-            HordeBot.Debug("Bot " .. bot:Nick() .. " placed turret via gamemode")
+            print("[Horde Bot] Bot " .. bot:Nick() .. " placed turret via gamemode")
             return turret
         end
     end
@@ -84,6 +88,7 @@ function HordeBot.SpawnTurret(bot, pos, data)
     -- Try concommand
     bot:ConCommand("horde_place_turret")
     data.turretPlaced = true
+    print("[Horde Bot] Bot " .. bot:Nick() .. " used concommand to place turret")
     
     -- Look for newly created turret entity
     timer.Simple(0.5, function()
@@ -112,7 +117,7 @@ function HordeBot.SpawnTurret(bot, pos, data)
         if closestTurret then
             data.currentTurret = closestTurret
             turretEntities[closestTurret] = {owner = bot, placedTime = CurTime()}
-            HordeBot.Debug("Bot " .. bot:Nick() .. " placed turret via concommand")
+            print("[Horde Bot] Bot " .. bot:Nick() .. " found placed turret")
         end
     end)
     

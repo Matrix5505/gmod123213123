@@ -15,6 +15,32 @@ if SERVER then
     include("horde_bot/sv_bot_shop.lua")
     include("horde_bot/sv_bot_turrets.lua")
     include("horde_bot/sv_bot_ai.lua")
+    
+    -- Initialize bot system after everything is loaded
+    timer.Simple(2.0, function()
+        if not HordeBot.Initialized then
+            print("[HordeBot] Initializing Bot System...")
+            
+            -- Create a global table for active bots if it doesn't exist
+            if not HordeBot.ActiveBots then
+                HordeBot.ActiveBots = {}
+            end
+            
+            -- Detect gamemode and set up hooks
+            local gmName = GAMEMODE and GAMEMODE.Name or "unknown"
+            print("[HordeBot] Detected gamemode: " .. gmName)
+            
+            -- Start the main bot think loop
+            timer.Create("HordeBot_ThinkLoop", 1.0, 0, function()
+                if HordeBot.ThinkAllBots then
+                    HordeBot.ThinkAllBots()
+                end
+            end)
+            
+            HordeBot.Initialized = true
+            print("[HordeBot] Bot System Initialized! Spawn bots with 'horde_spawn_bot [name] [personality]'")
+        end
+    end)
 end
 
 if CLIENT then
