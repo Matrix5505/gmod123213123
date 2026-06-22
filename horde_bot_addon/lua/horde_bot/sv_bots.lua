@@ -89,6 +89,15 @@ function HordeBot.RemoveAllBots()
     print("[Horde Bot] Removed all bots")
 end
 
+-- Think loop for all bots (called by timer)
+function HordeBot.ThinkAllBots()
+    for bot, data in pairs(HordeBot.Bots) do
+        if IsValid(bot) and bot:Alive() then
+            HordeBot.ThinkBot(bot, data)
+        end
+    end
+end
+
 -- Start AI thinking for a bot
 function HordeBot.StartBotAI(bot)
     if not IsValid(bot) then return end
@@ -108,15 +117,19 @@ function HordeBot.StartBotAI(bot)
             return
         end
         
-        HordeBot.ThinkBot(bot)
+        local data = HordeBot.GetBotData(bot)
+        HordeBot.ThinkBot(bot, data)
     end)
     
     botThinkTimers[bot] = true
 end
 
 -- Main bot AI logic
-function HordeBot.ThinkBot(bot)
-    local data = HordeBot.GetBotData(bot)
+function HordeBot.ThinkBot(bot, data)
+    -- Get bot data if not provided
+    if not data then
+        data = HordeBot.GetBotData(bot)
+    end
     if not data then return end
     
     local curTime = CurTime()
