@@ -1,45 +1,21 @@
 ```
-# Compiled files
-*.pyc
-*.o
-*.obj
-*.exe
+# Garry's Mod specific ignores
+data/
+download/
+lua/bin/
 *.dll
 *.so
-*.a
-*.out
+*.dylib
 
 # Dependencies
-node_modules/
-venv/
-.venv/
-__pycache__/
-.mypy_cache/
-.pytest_cache/
-target/
-.gradle/
+!horde_bot_addon/lua/autorun/server/horde_bot_init.lua
+!horde_bot_addon/lua/horde_bot/
 
-# Build artifacts
-dist/
-build/
-coverage/
-htmlcov/
-.coverage
-
-# Editor/IDE files
-.vscode/
-.idea/
-*.swp
-*.swo
+# Generated content
+*.cache
+*.bak
 *.tmp
-
-# Logs
 *.log
-
-# Environment
-.env
-.env.local
-*.env.*
 
 # System files
 .DS_Store
